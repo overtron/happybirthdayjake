@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Jake!</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Main content -->
+    <div class="container">
+        <h1>🎉 Happy Birthday, Jake! 🎉</h1>
+        <h2>To a woodworker, coder, fisher, and bringer of Pizza Friday joy.</h2>
+        
+        <button id="surprise-button">Press this for a surprise</button>
+    </div>
+    
+    <!-- Surprise Modal -->
+    <div id="surprise-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Birthday Surprise!</h2>
+            <div id="birthday-message">
+                <!-- Birthday message will go here -->
+            </div>
+            <div id="fun-fact">
+                <!-- Rotating fun facts will appear here -->
+            </div>
+            <img src="images/cat-party.gif" alt="Celebrating cat" class="responsive-img">
+        </div>
+    </div>
+    
+    <!-- Footer with Easter Egg -->
+    <footer>
+        <p>Made with <span class="heart">❤️</span> for Jake's birthday</p>
+        <span id="pizza-icon" class="easter-egg">🍕</span>
+    </footer>
+    
+    <!-- Audio element (hidden) -->
+    <audio id="background-music" loop>
+        <source src="audio/birthday.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

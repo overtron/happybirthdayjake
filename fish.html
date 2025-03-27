@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fishing Easter Egg</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .fish-container {
+            margin: 1.5rem auto;
+            max-width: 100%;
+            overflow-x: auto; /* For ASCII art on small screens */
+        }
+        
+        .ascii-fish {
+            font-family: monospace;
+            white-space: pre;
+            font-size: 0.7rem;
+            line-height: 1.2;
+            text-align: center;
+        }
+        
+        .back-button {
+            display: inline-block;
+            background-color: var(--button-color);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            margin-top: 1.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover,
+        .back-button:active {
+            background-color: var(--button-hover);
+            transform: scale(1.05);
+        }
+        
+        @media (min-width: 768px) {
+            .ascii-fish {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎣 Caught You Looking! 🎣</h1>
+        <h2>Hope you catch a big one this year, Jake!</h2>
+        
+        <div class="fish-container">
+            <pre class="ascii-fish">
+               /`·.¸
+              /¸...¸`:·
+          ¸.·´  ¸   `·.¸.·´)
+         : © ):´;      ¸  {
+          `·.¸ `·  ¸.·´\`·¸)
+              `\\´´\¸.·´
+            </pre>
+            <p>You found the secret fishing spot!</p>
+        </div>
+        
+        <a href="index.html" class="back-button">Back to Birthday</a>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        // Launch confetti when page loads - mobile optimized
+        document.addEventListener('DOMContentLoaded', function() {
+            const isMobile = window.innerWidth < 768;
+            confetti({
+                particleCount: isMobile ? 30 : 50,
+                spread: isMobile ? 50 : 70,
+                origin: { y: 0.6 }
+            });
+        });
+    </script>
+</body>
+</html>
