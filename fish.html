@@ -6,51 +6,105 @@
     <title>Fishing Easter Egg</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .fish-container {
-            margin: 1.5rem auto;
-            max-width: 100%;
-            overflow-x: auto; /* For ASCII art on small screens */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        
+
+        .fish-page {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            max-width: 700px;
+        }
+
+        .fish-page h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #546de5, #ffd93d);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+            margin-bottom: 1rem;
+        }
+
+        .fish-page h2 {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: var(--text-muted);
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+
+        .fish-container {
+            margin: 2rem auto;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
         .ascii-fish {
-            font-family: monospace;
+            font-family: 'Space Mono', monospace;
             white-space: pre;
             font-size: 0.7rem;
             line-height: 1.2;
             text-align: center;
+            color: var(--secondary);
+            text-shadow: 0 0 20px var(--secondary-glow);
         }
-        
+
+        .fish-container p {
+            color: var(--text-muted);
+            margin-top: 1.5rem;
+            font-size: 1rem;
+        }
+
         .back-button {
-            display: inline-block;
-            background-color: var(--button-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--secondary), #7c8cf8);
             color: white;
             text-decoration: none;
-            padding: 1rem 1.5rem;
+            padding: 1rem 2rem;
             border-radius: 50px;
-            margin-top: 1.5rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            margin-top: 2rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 20px var(--secondary-glow);
         }
-        
+
         .back-button:hover,
         .back-button:active {
-            background-color: var(--button-hover);
-            transform: scale(1.05);
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 8px 30px var(--secondary-glow);
         }
-        
+
         @media (min-width: 768px) {
             .ascii-fish {
                 font-size: 1rem;
             }
         }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600&family=Space+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>🎣 Caught You Looking! 🎣</h1>
+    <div class="fish-page">
+        <h1>Caught You Looking!</h1>
         <h2>Hope you catch a big one this year, Jake!</h2>
-        
-        <div class="fish-container">
+
+        <div class="fish-container glass-card" style="padding: 2rem;">
             <pre class="ascii-fish">
                /`·.¸
               /¸...¸`:·
@@ -61,19 +115,20 @@
             </pre>
             <p>You found the secret fishing spot!</p>
         </div>
-        
+
         <a href="index.html" class="back-button">Back to Birthday</a>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
-        // Launch confetti when page loads - mobile optimized
         document.addEventListener('DOMContentLoaded', function() {
-            const isMobile = window.innerWidth < 768;
+            var isMobile = window.innerWidth < 768;
+            var colors = ['#546de5', '#ffd93d', '#ff6b6b', '#ffffff'];
             confetti({
-                particleCount: isMobile ? 30 : 50,
+                particleCount: isMobile ? 30 : 60,
                 spread: isMobile ? 50 : 70,
-                origin: { y: 0.6 }
+                origin: { y: 0.6 },
+                colors: colors
             });
         });
     </script>

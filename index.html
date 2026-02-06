@@ -5,43 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Jake!</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600&family=Space+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Main content -->
-    <div class="container">
-        <h1>🎉 Happy Birthday, Jake! 🎉</h1>
-        <h2>To a woodworker, coder, fisher, and bringer of Pizza Friday joy.</h2>
-        
-        <button id="surprise-button">Press this for a surprise</button>
-    </div>
-    
+
+    <!-- Particle canvas background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Floating decorative elements -->
+    <div id="floating-decor" aria-hidden="true"></div>
+
+    <!-- Navigation dots -->
+    <nav id="section-nav" aria-label="Section navigation">
+        <div class="nav-dot active" data-section="0"></div>
+        <div class="nav-dot" data-section="1"></div>
+        <div class="nav-dot" data-section="2"></div>
+        <div class="nav-dot" data-section="3"></div>
+    </nav>
+
+    <!-- Section 1: Hero -->
+    <section class="full-section hero-section" id="section-hero">
+        <div class="parallax-bg" data-speed="0.3"></div>
+        <div class="hero-content reveal">
+            <div class="glow-text-wrapper">
+                <h1 class="glow-text" data-text="Happy Birthday, Jake!">
+                    <span class="emoji-float">&#127881;</span>
+                    Happy Birthday, Jake!
+                    <span class="emoji-float">&#127881;</span>
+                </h1>
+            </div>
+            <p class="hero-subtitle reveal-delay-1">
+                Woodworker. Coder. Fisher. Pizza Friday Legend.
+            </p>
+            <div class="scroll-indicator reveal-delay-2">
+                <span>Scroll to explore</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: About / Tribute -->
+    <section class="full-section tribute-section" id="section-tribute">
+        <div class="parallax-bg" data-speed="0.2"></div>
+        <div class="section-content">
+            <h2 class="section-title reveal">A Toast to Jake</h2>
+            <div class="tribute-grid">
+                <div class="tribute-card reveal glass-card" data-tilt>
+                    <div class="card-icon">&#128187;</div>
+                    <h3>The Coder</h3>
+                    <p>Debugging stack traces by day, crafting elegant solutions that make the whole team better.</p>
+                </div>
+                <div class="tribute-card reveal glass-card" data-tilt>
+                    <div class="card-icon">&#129683;</div>
+                    <h3>The Woodworker</h3>
+                    <p>From code to craftsmanship, every piece built with the same precision and care.</p>
+                </div>
+                <div class="tribute-card reveal glass-card" data-tilt>
+                    <div class="card-icon">&#127907;</div>
+                    <h3>The Fisher</h3>
+                    <p>Legend says Jake can catch fish with just a witty comment and a cold brew.</p>
+                </div>
+                <div class="tribute-card reveal glass-card" data-tilt>
+                    <div class="card-icon">&#127829;</div>
+                    <h3>Pizza Friday Hero</h3>
+                    <p>Making Fridays more delicious, one legendary pizza order at a time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Fun Facts Carousel -->
+    <section class="full-section facts-section" id="section-facts">
+        <div class="parallax-bg" data-speed="0.15"></div>
+        <div class="section-content">
+            <h2 class="section-title reveal">Did You Know?</h2>
+            <div class="facts-carousel reveal glass-card">
+                <div class="fact-slide active" id="fact-0">
+                    <span class="fact-number">01</span>
+                    <p>Jake can debug a stack trace AND sand down a table leg with finesse.</p>
+                </div>
+                <div class="fact-slide" id="fact-1">
+                    <span class="fact-number">02</span>
+                    <p>Jake's woodworking projects are as elegant as his code.</p>
+                </div>
+                <div class="fact-slide" id="fact-2">
+                    <span class="fact-number">03</span>
+                    <p>Legend says Jake can catch fish with just a witty comment.</p>
+                </div>
+                <div class="fact-slide" id="fact-3">
+                    <span class="fact-number">04</span>
+                    <p>Jake's Pizza Fridays have become the stuff of legend.</p>
+                </div>
+                <div class="fact-slide" id="fact-4">
+                    <span class="fact-number">05</span>
+                    <p>Jake once brewed a beer so good, it fixed a production bug.</p>
+                </div>
+            </div>
+            <div class="carousel-dots reveal">
+                <span class="carousel-dot active" data-fact="0"></span>
+                <span class="carousel-dot" data-fact="1"></span>
+                <span class="carousel-dot" data-fact="2"></span>
+                <span class="carousel-dot" data-fact="3"></span>
+                <span class="carousel-dot" data-fact="4"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Surprise -->
+    <section class="full-section surprise-section" id="section-surprise">
+        <div class="parallax-bg" data-speed="0.25"></div>
+        <div class="section-content">
+            <h2 class="section-title reveal">One More Thing...</h2>
+            <p class="surprise-subtitle reveal">Click below for a birthday surprise</p>
+            <button id="surprise-button" class="reveal glow-button">
+                <span class="btn-text">Open Your Gift</span>
+                <span class="btn-icon">&#127873;</span>
+            </button>
+        </div>
+    </section>
+
     <!-- Surprise Modal -->
     <div id="surprise-modal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content glass-modal">
             <span class="close-button">&times;</span>
-            <h2>Birthday Surprise!</h2>
-            <div id="birthday-message">
-                <!-- Birthday message will go here -->
-            </div>
-            <div id="fun-fact">
-                <!-- Rotating fun facts will appear here -->
-            </div>
-            <img src="images/cat-party.gif" alt="Celebrating cat" class="responsive-img">
+            <h2 class="modal-title">Happy Birthday!</h2>
+            <div id="birthday-message" class="typewriter-text"></div>
+            <div id="fun-fact" class="modal-fun-fact"></div>
+            <img src="images/cat-party.gif" alt="Celebrating cat" class="responsive-img modal-img">
         </div>
     </div>
-    
+
     <!-- Footer with Easter Egg -->
     <footer>
-        <p>Made with <span class="heart">❤️</span> for Jake's birthday</p>
-        <span id="pizza-icon" class="easter-egg">🍕</span>
+        <p>Made with <span class="heart">&#10084;&#65039;</span> for Jake's birthday</p>
+        <span id="pizza-icon" class="easter-egg">&#127829;</span>
     </footer>
-    
+
     <!-- Audio element (hidden) -->
     <audio id="background-music" loop>
         <source src="audio/birthday.mp3" type="audio/mpeg">
+        <source src="audio/birthday.m4a" type="audio/mp4">
     </audio>
-    
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script src="js/main.js"></script>
