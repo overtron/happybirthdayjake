@@ -13,8 +13,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const ctx = canvas.getContext('2d');
     const sections = document.querySelectorAll('.full-section');
     const navDots = document.querySelectorAll('.nav-dot');
+    const bottomNavDots = document.querySelectorAll('.bottom-nav-dot');
     const carouselDots = document.querySelectorAll('.carousel-dot');
     const factSlides = document.querySelectorAll('.fact-slide');
+    const factsCarousel = document.querySelector('.facts-carousel');
 
     // ============================================================
     // DATA
@@ -27,16 +29,21 @@ document.addEventListener('DOMContentLoaded', function () {
         "Jake once brewed a beer so good, it fixed a production bug."
     ];
 
-    const message = "Happy Birthday to a person who can debug a stack trace *and* sand down a table leg with finesse. You make tech more human and Fridays more delicious. Cheers to another trip around the sun, full of side projects and slow pours. 🎉🍻";
+    const message = "Happy Birthday to a person who can debug a stack trace *and* sand down a table leg with finesse. You make tech more human and Fridays more delicious. Cheers to another trip around the sun, full of side projects and slow pours. \u{1F389}\u{1F37B}";
 
-    const floatingEmojis = ['🎈', '🎉', '🎊', '⭐', '✨', '🎂', '🍕', '🎁', '🎵', '🪵'];
+    const floatingEmojis = ['\u{1F388}', '\u{1F389}', '\u{1F38A}', '\u2B50', '\u2728', '\u{1F382}', '\u{1F355}', '\u{1F381}', '\u{1F3B5}', '\u{1FAB5}'];
+
+    // ============================================================
+    // DEVICE DETECTION
+    // ============================================================
+    const isMobile = window.innerWidth < 768;
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
     // ============================================================
     // PARTICLE SYSTEM (Background stars / sparkles)
     // ============================================================
     let particles = [];
-    const isMobile = window.innerWidth < 768;
-    const PARTICLE_COUNT = isMobile ? 40 : 80;
+    const PARTICLE_COUNT = isMobile ? 30 : 80;
 
     function resizeCanvas() {
         canvas.width = window.innerWidth;
@@ -74,13 +81,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const currentOpacity = this.opacity * (0.5 + 0.5 * Math.sin(this.pulse));
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity})`;
+            ctx.fillStyle = 'rgba(255, 255, 255, ' + currentOpacity + ')';
             ctx.fill();
 
             // Glow
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity * 0.1})`;
+            ctx.fillStyle = 'rgba(255, 255, 255, ' + (currentOpacity * 0.1) + ')';
             ctx.fill();
         }
     }
@@ -88,18 +95,18 @@ document.addEventListener('DOMContentLoaded', function () {
     // Connection lines between nearby particles (desktop only)
     function drawConnections() {
         if (isMobile) return;
-        const maxDist = 120;
-        for (let i = 0; i < particles.length; i++) {
-            for (let j = i + 1; j < particles.length; j++) {
-                const dx = particles[i].x - particles[j].x;
-                const dy = particles[i].y - particles[j].y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
+        var maxDist = 120;
+        for (var i = 0; i < particles.length; i++) {
+            for (var j = i + 1; j < particles.length; j++) {
+                var dx = particles[i].x - particles[j].x;
+                var dy = particles[i].y - particles[j].y;
+                var dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < maxDist) {
-                    const opacity = (1 - dist / maxDist) * 0.08;
+                    var opacity = (1 - dist / maxDist) * 0.08;
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(particles[j].x, particles[j].y);
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+                    ctx.strokeStyle = 'rgba(255, 255, 255, ' + opacity + ')';
                     ctx.lineWidth = 0.5;
                     ctx.stroke();
                 }
@@ -107,13 +114,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
+    for (var i = 0; i < PARTICLE_COUNT; i++) {
         particles.push(new Particle());
     }
 
     function animateParticles() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => {
+        particles.forEach(function (p) {
             p.update();
             p.draw();
         });
@@ -125,92 +132,110 @@ document.addEventListener('DOMContentLoaded', function () {
     // ============================================================
     // FLOATING DECORATIVE EMOJIS
     // ============================================================
-    const floatingDecor = document.getElementById('floating-decor');
+    var floatingDecor = document.getElementById('floating-decor');
 
     function spawnFloatingEmoji() {
-        const el = document.createElement('div');
+        var el = document.createElement('div');
         el.className = 'floating-element';
         el.textContent = floatingEmojis[Math.floor(Math.random() * floatingEmojis.length)];
         el.style.left = Math.random() * 100 + '%';
-        el.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+        el.style.fontSize = (Math.random() * 1 + 0.8) + 'rem';
 
-        const duration = Math.random() * 15 + 15;
+        var duration = Math.random() * 15 + 15;
         el.style.animationDuration = duration + 's';
         el.style.animationDelay = Math.random() * 5 + 's';
 
         floatingDecor.appendChild(el);
 
-        setTimeout(() => {
+        setTimeout(function () {
             if (el.parentNode) el.parentNode.removeChild(el);
         }, (duration + 5) * 1000);
     }
 
-    // Spawn initial batch
-    for (let i = 0; i < (isMobile ? 5 : 10); i++) {
+    // Spawn initial batch (fewer on mobile)
+    var initialEmojiCount = isMobile ? 4 : 10;
+    for (var i = 0; i < initialEmojiCount; i++) {
         setTimeout(spawnFloatingEmoji, Math.random() * 5000);
     }
 
-    // Keep spawning
-    setInterval(spawnFloatingEmoji, isMobile ? 4000 : 2500);
+    // Keep spawning (less frequently on mobile)
+    setInterval(spawnFloatingEmoji, isMobile ? 5000 : 2500);
 
     // ============================================================
-    // PARALLAX SCROLLING
+    // PARALLAX SCROLLING (disabled on touch devices for performance)
     // ============================================================
-    const parallaxBgs = document.querySelectorAll('.parallax-bg');
+    var parallaxBgs = document.querySelectorAll('.parallax-bg');
 
-    function updateParallax() {
-        const scrollY = window.scrollY;
-        parallaxBgs.forEach(bg => {
-            const speed = parseFloat(bg.dataset.speed) || 0.2;
-            const section = bg.parentElement;
-            const rect = section.getBoundingClientRect();
-            const offset = rect.top * speed;
-            bg.style.transform = `translateY(${offset}px)`;
+    if (!isTouchDevice) {
+        function updateParallax() {
+            parallaxBgs.forEach(function (bg) {
+                var speed = parseFloat(bg.dataset.speed) || 0.2;
+                var section = bg.parentElement;
+                var rect = section.getBoundingClientRect();
+                var offset = rect.top * speed;
+                bg.style.transform = 'translateY(' + offset + 'px)';
+            });
+        }
+
+        window.addEventListener('scroll', function () {
+            requestAnimationFrame(updateParallax);
         });
     }
-
-    window.addEventListener('scroll', function () {
-        requestAnimationFrame(updateParallax);
-    });
 
     // ============================================================
     // SCROLL REVEAL (Intersection Observer)
     // ============================================================
-    const revealElements = document.querySelectorAll('.reveal');
+    var revealElements = document.querySelectorAll('.reveal');
 
-    const revealObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(entry => {
+    var revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
             }
         });
     }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0.1,
+        rootMargin: '0px 0px -30px 0px'
     });
 
-    revealElements.forEach(el => revealObserver.observe(el));
+    revealElements.forEach(function (el) { revealObserver.observe(el); });
 
     // ============================================================
-    // SECTION NAVIGATION DOTS
+    // SECTION NAVIGATION (dots + bottom nav)
     // ============================================================
-    const sectionObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(entry => {
+    function updateActiveSection(index) {
+        navDots.forEach(function (dot) { dot.classList.remove('active'); });
+        if (navDots[index]) navDots[index].classList.add('active');
+
+        bottomNavDots.forEach(function (dot) { dot.classList.remove('active'); });
+        if (bottomNavDots[index]) bottomNavDots[index].classList.add('active');
+    }
+
+    var sectionObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
             if (entry.isIntersecting) {
-                const index = Array.from(sections).indexOf(entry.target);
-                navDots.forEach(dot => dot.classList.remove('active'));
-                if (navDots[index]) navDots[index].classList.add('active');
+                var index = Array.from(sections).indexOf(entry.target);
+                updateActiveSection(index);
             }
         });
     }, {
         threshold: 0.5
     });
 
-    sections.forEach(section => sectionObserver.observe(section));
+    sections.forEach(function (section) { sectionObserver.observe(section); });
 
-    navDots.forEach(dot => {
+    // Desktop nav dots
+    navDots.forEach(function (dot) {
         dot.addEventListener('click', function () {
-            const index = parseInt(this.dataset.section);
+            var index = parseInt(this.dataset.section);
+            sections[index].scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // Mobile bottom nav dots
+    bottomNavDots.forEach(function (dot) {
+        dot.addEventListener('click', function () {
+            var index = parseInt(this.dataset.section);
             sections[index].scrollIntoView({ behavior: 'smooth' });
         });
     });
@@ -218,11 +243,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // ============================================================
     // FUN FACTS CAROUSEL
     // ============================================================
-    let currentFact = 0;
-    let factInterval;
+    var currentFact = 0;
+    var factInterval;
 
     function showFact(index) {
-        factSlides.forEach((slide, i) => {
+        factSlides.forEach(function (slide, i) {
             slide.classList.remove('active', 'exit');
             if (i === currentFact && i !== index) {
                 slide.classList.add('exit');
@@ -231,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function () {
         currentFact = index;
         factSlides[currentFact].classList.add('active');
 
-        carouselDots.forEach(dot => dot.classList.remove('active'));
+        carouselDots.forEach(function (dot) { dot.classList.remove('active'); });
         carouselDots[currentFact].classList.add('active');
     }
 
@@ -239,11 +264,15 @@ document.addEventListener('DOMContentLoaded', function () {
         showFact((currentFact + 1) % factSlides.length);
     }
 
+    function prevFact() {
+        showFact((currentFact - 1 + factSlides.length) % factSlides.length);
+    }
+
     function startCarousel() {
         factInterval = setInterval(nextFact, 4000);
     }
 
-    carouselDots.forEach(dot => {
+    carouselDots.forEach(function (dot) {
         dot.addEventListener('click', function () {
             clearInterval(factInterval);
             showFact(parseInt(this.dataset.fact));
@@ -254,50 +283,79 @@ document.addEventListener('DOMContentLoaded', function () {
     startCarousel();
 
     // ============================================================
-    // 3D TILT EFFECT ON CARDS
+    // TOUCH SWIPE FOR CAROUSEL
     // ============================================================
-    const tiltCards = document.querySelectorAll('[data-tilt]');
+    if (factsCarousel) {
+        var touchStartX = 0;
+        var touchEndX = 0;
+        var swipeThreshold = 50;
 
-    tiltCards.forEach(card => {
-        card.addEventListener('mousemove', function (e) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = (y - centerY) / centerY * -8;
-            const rotateY = (x - centerX) / centerX * 8;
+        factsCarousel.addEventListener('touchstart', function (e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
 
-            card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        factsCarousel.addEventListener('touchend', function (e) {
+            touchEndX = e.changedTouches[0].screenX;
+            var diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                clearInterval(factInterval);
+                if (diff > 0) {
+                    nextFact();
+                } else {
+                    prevFact();
+                }
+                startCarousel();
+            }
+        }, { passive: true });
+    }
+
+    // ============================================================
+    // 3D TILT EFFECT ON CARDS (disabled on touch devices)
+    // ============================================================
+    if (!isTouchDevice) {
+        var tiltCards = document.querySelectorAll('[data-tilt]');
+
+        tiltCards.forEach(function (card) {
+            card.addEventListener('mousemove', function (e) {
+                var rect = card.getBoundingClientRect();
+                var x = e.clientX - rect.left;
+                var y = e.clientY - rect.top;
+                var centerX = rect.width / 2;
+                var centerY = rect.height / 2;
+                var rotateX = (y - centerY) / centerY * -8;
+                var rotateY = (x - centerX) / centerX * 8;
+
+                card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', function () {
+                card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
+            });
         });
-
-        card.addEventListener('mouseleave', function () {
-            card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
-        });
-    });
+    }
 
     // ============================================================
     // TYPEWRITER EFFECT
     // ============================================================
-    let typewriterTimeout;
+    var typewriterTimeout;
 
     function typeWriter(element, text, speed, callback) {
-        let index = 0;
+        var index = 0;
         element.textContent = '';
 
-        const cursor = document.createElement('span');
+        var cursor = document.createElement('span');
         cursor.className = 'typewriter-cursor';
         element.appendChild(cursor);
 
         function type() {
             if (index < text.length) {
-                const textNode = document.createTextNode(text.charAt(index));
+                var textNode = document.createTextNode(text.charAt(index));
                 element.insertBefore(textNode, cursor);
                 index++;
                 typewriterTimeout = setTimeout(type, speed);
             } else {
-                // Remove cursor after finishing
-                setTimeout(() => {
+                setTimeout(function () {
                     if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
                     if (callback) callback();
                 }, 1500);
@@ -311,12 +369,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // SURPRISE BUTTON & MODAL
     // ============================================================
     surpriseButton.addEventListener('click', function () {
-        backgroundMusic.play().catch(e => console.log('Audio play failed:', e));
+        backgroundMusic.play().catch(function (e) { console.log('Audio play failed:', e); });
         openModal();
     });
 
     function openModal() {
         modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
 
         // Reset message and start typewriter
         birthdayMessage.textContent = '';
@@ -328,25 +387,28 @@ document.addEventListener('DOMContentLoaded', function () {
         launchConfettiBurst();
     }
 
-    closeButton.addEventListener('click', function () {
+    function closeModal() {
         modal.style.display = 'none';
+        document.body.style.overflow = '';
         clearTimeout(typewriterTimeout);
-    });
+        clearInterval(modalFactInterval);
+    }
+
+    closeButton.addEventListener('click', closeModal);
 
     window.addEventListener('click', function (event) {
         if (event.target === modal) {
-            modal.style.display = 'none';
-            clearTimeout(typewriterTimeout);
+            closeModal();
         }
     });
 
     // ============================================================
     // FUN FACTS IN MODAL
     // ============================================================
-    let modalFactInterval;
+    var modalFactInterval;
 
     function showRandomFunFact() {
-        let currentIndex = 0;
+        var currentIndex = 0;
         funFactElement.textContent = funFacts[currentIndex];
         funFactElement.style.opacity = '1';
 
@@ -375,18 +437,17 @@ document.addEventListener('DOMContentLoaded', function () {
     function launchConfetti(particleCount) {
         particleCount = particleCount || 100;
         confetti({
-            particleCount: isMobile ? Math.min(particleCount, 50) : particleCount,
+            particleCount: isMobile ? Math.min(particleCount, 40) : particleCount,
             spread: isMobile ? 50 : 70,
             origin: { y: 0.6 }
         });
     }
 
     function launchConfettiBurst() {
-        // Multi-wave confetti burst
         var colors = ['#ff6b6b', '#ffd93d', '#546de5', '#ff9a8b', '#ffffff'];
 
         confetti({
-            particleCount: isMobile ? 40 : 80,
+            particleCount: isMobile ? 30 : 80,
             spread: 60,
             origin: { y: 0.7, x: 0.5 },
             colors: colors
@@ -394,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         setTimeout(function () {
             confetti({
-                particleCount: isMobile ? 30 : 60,
+                particleCount: isMobile ? 20 : 60,
                 angle: 60,
                 spread: 55,
                 origin: { x: 0, y: 0.65 },
@@ -404,7 +465,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         setTimeout(function () {
             confetti({
-                particleCount: isMobile ? 30 : 60,
+                particleCount: isMobile ? 20 : 60,
                 angle: 120,
                 spread: 55,
                 origin: { x: 1, y: 0.65 },
@@ -417,14 +478,14 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(launchConfetti, 500);
 
     // ============================================================
-    // ORIENTATION CHANGE
+    // ORIENTATION CHANGE & RESIZE
     // ============================================================
     window.addEventListener('orientationchange', function () {
         setTimeout(function () {
             resizeCanvas();
             if (modal.style.display === 'block') {
                 var modalContent = document.querySelector('.modal-content');
-                if (modalContent) modalContent.style.marginTop = '5%';
+                if (modalContent) modalContent.style.marginTop = '2%';
             }
         }, 300);
     });

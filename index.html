@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Happy Birthday Jake!</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -111,6 +111,7 @@
                 <span class="carousel-dot" data-fact="3"></span>
                 <span class="carousel-dot" data-fact="4"></span>
             </div>
+            <div class="swipe-hint reveal">Swipe to browse</div>
         </div>
     </section>
 
@@ -134,9 +135,17 @@
             <h2 class="modal-title">Happy Birthday!</h2>
             <div id="birthday-message" class="typewriter-text"></div>
             <div id="fun-fact" class="modal-fun-fact"></div>
-            <img src="images/cat-party.gif" alt="Celebrating cat" class="responsive-img modal-img">
+            <img src="images/cat-party.gif" alt="Celebrating cat" class="responsive-img modal-img" loading="lazy">
         </div>
     </div>
+
+    <!-- Bottom Navigation (mobile) -->
+    <nav class="bottom-nav" aria-label="Section navigation">
+        <button class="bottom-nav-dot active" data-section="0" aria-label="Hero section">&#127881;</button>
+        <button class="bottom-nav-dot" data-section="1" aria-label="Tribute section">&#127942;</button>
+        <button class="bottom-nav-dot" data-section="2" aria-label="Facts section">&#128161;</button>
+        <button class="bottom-nav-dot" data-section="3" aria-label="Surprise section">&#127873;</button>
+    </nav>
 
     <!-- Footer with Easter Egg -->
     <footer>
